@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Selector Dinámico Django + AJAX</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        label, select { display: block; margin-bottom: 10px; }
+        select { padding: 8px; width: 250px; }
+    </style>
+</head>
+<body>
+    <h1>Selección de Ubicación (México)</h1>
+
+    <form method="get">
+        <label for="id_estado">Selecciona un Estado:</label>
+        <select name="estado" id="id_estado">
+            <option value="">---------</option>
+            {% for estado in estados %}
+                <option value="{{ estado.id }}">{{ estado.nombre }}</option>
+            {% endfor %}
+        </select>
+        
+        <br>
+
+        <label for="id_municipio">Selecciona un Municipio:</label>
+        <select name="municipio" id="id_municipio" disabled>
+            <option value="">Selecciona un estado primero</option>
+        </select>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            // Se ejecuta cuando el valor del select de estado cambia
+            $("#id_estado").change(function() {
+                var estadoId = $(this).val(); // Obtener el ID del estado seleccionado
+                var $municipioSelect = $("#id_municipio");
+                
+                // 1. Limpiar y deshabilitar el select de municipios
+                $municipioSelect.html('<option value="">Cargando municipios...</option>').prop('disabled', true);
+
+                if (estadoId) {
+                    // 2. Petición AJAX (GET)
+                    $.ajax({
+                        // Usamos la URL que definimos en geodata/urls.py
+                        url: "{% url 'ajax_cargar_municipios' %}", 
+                        data: {
+                            'estado_id': estadoId // Enviamos el ID del estado como parámetro GET
+                        },
+                        dataType: 'json', // Esperamos una respuesta JSON
+                        success: function(data) {
+                            // 3. Respuesta Exitosa
+                            
+                            $municipioSelect.html('<option value="">---------</option>');
+                            
+                            if (data.municipios && data.municipios.length > 0) {
+                                // Iterar sobre el array de municipios y crear las opciones
+                                $.each(data.municipios, function(index, municipio) {
+                                    $municipioSelect.append('<option value="' + municipio.id + '">' + municipio.nombre + '</option>');
+                                });
+                                $municipioSelect.prop('disabled', false); // Habilitar select
+                            } else {
+                                $municipioSelect.html('<option value="">No hay municipios disponibles</option>');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // 4. Manejo de Errores
+                            console.error("AJAX Error: ", status, error);
+                            $municipioSelect.html('<option value="">Error al cargar (Revisa consola)</option>');
+                        }
+                    });
+                } else {
+                    // Si el estado se resetea a "---------"
+                    $municipioSelect.html('<option value="">Selecciona un estado primero</option>').prop('disabled', true);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

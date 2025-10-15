@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "nombre": "Aguascalientes",
+    "municipios": [
+      {"id": 101, "nombre": "Aguascalientes"},
+      {"id": 102, "nombre": "Asientos"},
+      {"id": 103, "nombre": "Calvillo"},
+      {"id": 104, "nombre": "Jesús María"}
+    ]
+  },
+  {
+    "id": 2,
+    "nombre": "Baja California",
+    "municipios": [
+      {"id": 201, "nombre": "Ensenada"},
+      {"id": 202, "nombre": "Mexicali"},
+      {"id": 203, "nombre": "Tijuana"},
+      {"id": 204, "nombre": "Rosarito"}
+    ]
+  },
+  {
+    "id": 3,
+    "nombre": "Chihuahua",
+    "municipios": [
+      {"id": 301, "nombre": "Chihuahua"},
+      {"id": 302, "nombre": "Ciudad Juárez"},
+      {"id": 303, "nombre": "Delicias"}
+    ]
+  }
+  ,
+  {
+    "id": 4,
+    "nombre": "Guanajuato",
+    "municipios": [
+      {"id": 301, "nombre": "Penjamo"},
+      {"id": 302, "nombre": "Leon"},
+      {"id": 303, "nombre": "Moroleon"},
+      {"id": 304, "nombre": "Uriangato"}
+    ]
+  }
+]
